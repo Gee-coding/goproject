@@ -1,4 +1,4 @@
-package main
+package godemo
 
 // Importing fmt package for the sake of printing
 import (
