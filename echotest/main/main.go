@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo"// set GOPATH module
 )
 
 func main() {
