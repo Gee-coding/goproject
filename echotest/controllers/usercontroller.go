@@ -2,14 +2,14 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/goproject/models"
+	"models"
 )
 
 func GetUser() {
 
 }
 
-func addUser(i int, u ...usermodel.Usermodel) {
+func addUser(i int, u ...Usermodel) {
 
 	var newuser = make(map[int]interface{})
 	newuser[i] = u
@@ -18,4 +18,9 @@ func addUser(i int, u ...usermodel.Usermodel) {
 
 func deleteUser() {
 
+}
+
+func search(){
+	func searchId(){}
+	func searchName(){}
 }
