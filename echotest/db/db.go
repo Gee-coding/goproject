@@ -7,16 +7,10 @@ import (
 
 func ConnectDB() *sql.DB {
 
-	dbUser := ""
-	dbPass := ""
-	dbName := ""
-	dbURL := ""
-
-	var connectDB string = "" + dbUser + ":" + dbPass + "@tcp(" + dbURL + ")/" + dbName + ""
-
-	conn, err := sql.Open("mysql", connectDB)
+	conn, err := sql.Open("mysql", "testball:testball@tcp(localhost:25060)/test_ball")
 	if err != nil {
 		fmt.Println("DB Connect Init::Err::", err)
+		panic(err.Error())
 	}
 
 	return conn
