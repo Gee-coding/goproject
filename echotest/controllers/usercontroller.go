@@ -8,22 +8,24 @@ import (
 )
 
 
-var (
-	users = map[int]*models.User{}
-	seq   = 1
-)
+// var (
+// 	users = map[int]*models.User{}
+// 	seq   = 1
+// )
 
 func getUserModel(c echo.Context) error {
 	var m models.User
 
 	return c.JSON(http.StatusOK, m)
 }
-func createNewUser()*User{
-	return &User{}
-}
+
 
 func editUser(c echo.Context) error{
-
+edit := new(models.User)
+if err := c.Bind(edit); err != nil{
+	return err
+}
+	return c.JSON(http.StatusOK,edit)
 }
 // func getUser(c echo.Context) error {
 // 	u := []models.UserModel{

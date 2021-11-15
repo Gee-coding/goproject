@@ -1,8 +1,9 @@
 package main
 
 import (
+	_ "goproject/echotest/controllers"
+	_ "goproject/echotest/models"
 	"net/http"
-	_"goproject/echotest/models"
 
 	"github.com/labstack/echo" // set GOPATH module
 )
@@ -14,14 +15,6 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
-
-	e.POST("/users", func(c echo.Context) (err error) {
-		u := new(models.UserModel)
-		if err = c.Bind(u); err != nil{
-			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-		}
-		return c.JSON(http.StatusOK,u)
-	})
-	e.GET("/users", getUserModel)
+	e.POST("/users", editUser )
 	e.Logger.Fatal(e.Start(":8080"))
 }
