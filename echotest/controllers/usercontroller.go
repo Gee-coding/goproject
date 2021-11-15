@@ -7,28 +7,24 @@ import (
 	"github.com/labstack/echo"
 )
 
+
 var (
-	users = map[int]*models.UserModel{}
+	users = map[int]*models.User{}
 	seq   = 1
 )
 
 func getUserModel(c echo.Context) error {
-	var m models.UserModel
+	var m models.User
 
 	return c.JSON(http.StatusOK, m)
 }
-func createUser(c echo.Context) error {
-	u := &models.UserModel{
-		Id : seq,
-	}
-	if err := c.Bind(u); err != nil {
-		return err
-	}
-	users[u.Id] = u
-	seq++
-	return c.JSON(http.StatusCreated, u)
+func createNewUser()*User{
+	return &User{}
 }
 
+func editUser(c echo.Context) error{
+
+}
 // func getUser(c echo.Context) error {
 // 	u := []models.UserModel{
 // 		{Id: 123,
