@@ -1,29 +1,46 @@
 package controllers
 
 import (
-	"fmt"
 	"goproject/echotest/models"
+	"net/http"
+
+	"github.com/labstack/echo"
 )
 
-//models.Usermodel
-func GetUser() {
+var (
+	users = map[int]*models.UserModel{}
+	seq   = 1
+)
 
+func getUserModel(c echo.Context) error {
+	var m models.UserModel
+
+	return c.JSON(http.StatusOK, m)
+}
+func createUser(c echo.Context) error {
+	u := &models.UserModel{
+		Id : seq,
+	}
+	if err := c.Bind(u); err != nil {
+		return err
+	}
+	users[u.Id] = u
+	seq++
+	return c.JSON(http.StatusCreated, u)
 }
 
-func addUser(i int, u ...models.UserModel) {
+// func getUser(c echo.Context) error {
+// 	u := []models.UserModel{
+// 		{Id: 123,
+// 			Name:     "John",
+// 			Position: "addmin",
+// 			Age:      20,
+// 		},
+// 		{Id: 234,
+// 			Name:     "Peter",
+// 			Position: "account",
+// 			Age:      31,
+// 		},
+// 	} return
 
-	var newuser = make(map[int]interface{})
-	newuser[i] = u
-
-	return
-	fmt.Println(newuser)
-}
-
-func deleteUser() {
-
-}
-
-// func search(){
-// 	func searchId(){}
-// 	func searchName(){}
 // }
