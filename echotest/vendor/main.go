@@ -17,7 +17,7 @@ func main() {
 	// e.GET("/user", func(c echo.Context) error {
 	// 	return c.JASON(http.StatusOK, "/user")
 	// })
-
+	e.POST("/users", createUser)
 	e.GET("/users", getUserModel)
 	e.Logger.Fatal(e.Start(":8080"))
 }
