@@ -1,27 +1,34 @@
 package main
 
 import (
-	"goproject/echotest/controllers"
 	_ "goproject/echotest/controllers"
+	"goproject/echotest/db"
 	_ "goproject/echotest/models"
-	"net/http"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo" // set GOPATH module
+	"github.com/labstack/echo/middleware"
 )
+
+var conn = db.ConnectDB()
 
 func main() {
 	e := echo.New()
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
-	e.GET("/users", controllers.GetUser)
+	// e.GET("/", func(c echo.Context) error {
+	// 	return c.String(http.StatusOK, "Hello, World!")
+	// })
 
-	e.POST("/users", controllers.InsertUser)
+	// e.GET("/users", controllers.GetUser)
 
-	e.DELETE("/users/:id",controllers.DeleteUser)
+	// e.POST("/users", controllers.InsertUserDB(123, "John", "admin", 25))
 
-	e.PUT("/users",controllers.EditUser)
-	e.Logger.Fatal(e.Start(":8080"))
+	// e.DELETE("/users/:id", controllers.DeleteUser)
+
+	// e.PUT("/users", controllers.EditUser)
+
+	e.Logger.Fatal(e.Start(":25060"))
 }
