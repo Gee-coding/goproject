@@ -55,3 +55,4 @@ func InsertUserDB(db *sql.DB, u models.User) error {
 	_, err = stmt.Exec(u.Id, u.Name, u.Position, u.Age)
 	return err
 }
+
