@@ -34,8 +34,8 @@ func main() {
 		return c.JSON(http.StatusOK, user)
 	})
 
+	e.GET("/users/:user_id", controllers.GetUserDB)
 	e.DELETE("/users/:user_id", controllers.DeleteUserDB)
-
 	e.PUT("/users", controllers.EditUser)
 
 	e.Logger.Fatal(e.Start(":25060"))

@@ -71,3 +71,18 @@ func DeleteUserDB(c echo.Context) error {
 	fmt.Println(result.RowsAffected())
 	return c.JSON(http.StatusOK, "Deleted")
 }
+
+func GetUserDB(c echo.Context) error {
+	
+	id := c.Param("user_id")
+  return c.JSON(http.StatusOK, id)
+}
+
+func InsertUserDB(c echo.Context) error {
+	
+	id := c.FormValue("")
+	name := c.FormValue("")
+	position := c.FormValue("")
+	age := c.FormValue("")
+	return c.String(http.StatusOK,"id:" + id + "name:" + name + ", position:" + position + "age:" + age)
+}
