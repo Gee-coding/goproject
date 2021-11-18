@@ -1,7 +1,8 @@
 package controllers
 
 import (
-	"database/sql"
+	"fmt"
+	"goproject/echotest/db"
 	"goproject/echotest/models"
 	"net/http"
 
@@ -13,6 +14,7 @@ import (
 
 // 	return c.JSON(http.StatusOK, m)
 // }
+var conn = db.ConnectDB()
 
 func InsertUser(c echo.Context) error {
 	edit := new(models.User)
@@ -50,9 +52,22 @@ func EditUser(c echo.Context) error {
 
 }
 
-func InsertUserDB(db *sql.DB, u models.User) error {
-	stmt, err := db.Prepare("INSERT INTO user (user_id,user_name,user_position,user_age)VALUE(?,?,?,?)")
-	_, err = stmt.Exec(u.Id, u.Name, u.Position, u.Age)
-	return err
-}
+// func InsertUserDB(c echo.Context) error {
 
+// }
+
+func DeleteUserDB(c echo.Context) error {
+
+	requested_id := c.Param("user_id")
+	sql := "Delete FROM user Where user_id = ?"
+	stmt, err := conn.Prepare(sql)
+	if err != nil {
+		fmt.Println(err)
+	}
+	result, err2 := stmt.Exec(requested_id)
+	if err2 != nil {
+		panic(err2)
+	}
+	fmt.Println(result.RowsAffected())
+	return c.JSON(http.StatusOK, "Deleted")
+}
