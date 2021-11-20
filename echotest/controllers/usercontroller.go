@@ -79,13 +79,14 @@ func GetUser(c echo.Context) error {
 	if err != nil {
 		fmt.Println(err)
 	}
+	defer rows.Close()
 	for rows.Next() {
-		err = rows.Scan(&userModel.Id, &userModel.Name, &userModel.Position, &userModel.Age)
-	}
-	if err != nil {
-		fmt.Println(err)
+
+		if err := rows.Scan(&userModel.Id, &userModel.Name, &userModel.Position, &userModel.Age); err != nil {
+			fmt.Println(err)
+		}
 	}
 	userModelList = append(userModelList, userModel)
-	rows.Close()
+
 	return c.JSON(http.StatusOK, userModelList)
 }
