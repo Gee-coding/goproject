@@ -23,22 +23,6 @@ func InsertUser(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, edit)
 }
-func GetUser(c echo.Context) error {
-	u := []models.User{
-		{Id: 123,
-			Name:     "John",
-			Position: "addmin",
-			Age:      20,
-		},
-		{Id: 234,
-			Name:     "Peter",
-			Position: "account",
-			Age:      31,
-		},
-	}
-	return c.JSON(200, u)
-
-}
 
 func DeleteUser(c echo.Context) error {
 
@@ -52,37 +36,56 @@ func EditUser(c echo.Context) error {
 
 }
 
-// func InsertUserDB(c echo.Context) error {
-
+// func GetUser(c echo.Context) error {
+// 	var (
+// 		userModel models.User
+// 		userModelList []models.UserList
+// 	)
+// id := c.QueryParam("user_id")
+// fmt.Println(id)
+// rows, err := conn.Query(`SELECT * FROM user WHERE user_id = ? `,id)
+// if err != nil {
+// 	fmt.Println("error user_id :", err)
 // }
+// for rows.Next() {
+// 	err = rows.Scan(
+// 		&userModel.Id,
+// 		&userModel.Name,
+// 		&userModel.Position,
+// 		&userModel.Age,
+// 	)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	} else {
+// 		userModelList = append(userModelList,models.UserList(userModel))
+// 	}
+// }
+// rows.Close()
+// return c.JSON(http.StatusOK, echo.Map{
+// 	"status": true,
+// 	"result": userModelList,
+// })
 
-func DeleteUserDB(c echo.Context) error {
+// 	}
 
-	requested_id := c.Param("user_id")
-	sql := "Delete FROM user Where user_id = ?"
-	stmt, err := conn.Prepare(sql)
+func GetUser(c echo.Context) error {
+	var (
+		userModel     models.User
+		userModelList []models.User
+	)
+	id := c.QueryParam("user_id")
+
+	rows, err := conn.Query(`SELECT * FROM user WHERE user_id = ?`, id)
 	if err != nil {
 		fmt.Println(err)
 	}
-	result, err2 := stmt.Exec(requested_id)
-	if err2 != nil {
-		panic(err2)
+	for rows.Next() {
+		err = rows.Scan(&userModel.Id, &userModel.Name, &userModel.Position, &userModel.Age)
 	}
-	fmt.Println(result.RowsAffected())
-	return c.JSON(http.StatusOK, "Deleted")
-}
-
-func GetUserDB(c echo.Context) error {
-	
-	id := c.Param("user_id")
-  return c.JSON(http.StatusOK, id)
-}
-
-func InsertUserDB(c echo.Context) error {
-	
-	id := c.FormValue("")
-	name := c.FormValue("")
-	position := c.FormValue("")
-	age := c.FormValue("")
-	return c.String(http.StatusOK,"id:" + id + "name:" + name + ", position:" + position + "age:" + age)
+	if err != nil {
+		fmt.Println(err)
+	}
+	userModelList = append(userModelList, userModel)
+	rows.Close()
+	return c.JSON(http.StatusOK, userModelList)
 }
