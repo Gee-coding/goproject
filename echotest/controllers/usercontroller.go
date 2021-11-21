@@ -9,11 +9,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-// func GetUserModel(c echo.Context) error {
-// 	var m models.User
 
-// 	return c.JSON(http.StatusOK, m)
-// }
 var conn = db.ConnectDB()
 
 func InsertUser(c echo.Context) error {
@@ -73,20 +69,26 @@ func GetUser(c echo.Context) error {
 		userModel     models.User
 		userModelList []models.User
 	)
-	id := c.QueryParam("user_id")
-
-	rows, err := conn.Query(`SELECT * FROM user WHERE user_id = ?`, id)
+	id := c.Param("user_id")
+	err := conn.QueryRow(`SELECT * FROM user WHERE user_id = ?`, id).Scan(
+		&userModel.Id, &userModel.Name, &userModel.Position, &userModel.Salary,
+	)
 	if err != nil {
 		fmt.Println(err)
 	}
-	defer rows.Close()
-	for rows.Next() {
+	userModelList = append(userModelList, userModel)
+	return c.JSON(http.StatusOK, userModelList)
+}
 
-		if err := rows.Scan(&userModel.Id, &userModel.Name, &userModel.Position, &userModel.Age); err != nil {
-			fmt.Println(err)
-		}
+func GetAllUser(c echo.Context) error {
+	var (
+		userModel     models.User
+		userModelList []models.User
+	)
+	err := conn.QueryRow(`SELECT * FROM user`)
+	if err != nil {
+		fmt.Println(err)
 	}
 	userModelList = append(userModelList, userModel)
-
 	return c.JSON(http.StatusOK, userModelList)
 }
