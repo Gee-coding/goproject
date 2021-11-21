@@ -22,14 +22,11 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
-	// e.GET("/users", func(c echo.Context) error {
-	// 	user := conn.QueryRow("")
-	// 	return c.JSON(http.StatusOK, user)
-	// })
 	e.GET("/users", controllers.GetAllUser)
 	e.GET("/users/:user_id", controllers.GetUser)
 	e.DELETE("/users/:user_id", controllers.DeleteUser)
 	e.PUT("/users", controllers.EditUser)
+	e.POST("/users", controllers.AddUser)
 
 	e.Logger.Fatal(e.Start(":25060"))
 }
