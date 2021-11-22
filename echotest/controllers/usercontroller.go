@@ -11,12 +11,42 @@ import (
 
 var conn = db.ConnectDB()
 
+// func AddUser(c echo.Context) error {
+// 	name := c.Param("user_name")
+// 	position := c.Param("user_position")
+// 	salary := c.Param("user_salary")
+// 	query := "INSERT INTO user (user_name,user_position,user_salary) VALUES (?,?,?) RETURNING user_id"
+// 	stmt, err := conn.Prepare(query)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	defer stmt.Close()
+// 	var lastid int
+// 	err = stmt.QueryRow(name, position, salary).Scan(&lastid)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	return c.JSON(http.StatusOK, lastid)
+// }
+
 func AddUser(c echo.Context) error {
-	edit := new(models.User)
-	if err := c.Bind(edit); err != nil {
-		return err
+	name := c.Param("user_name")
+	position := c.Param("user_position")
+	salary := c.Param("user_salary")
+
+	stmt,err := conn.Prepare("INSERT INTO user (user_name,user_position,user_salary)VALUES(?,?,?)")
+	if err != nil{
+		fmt.Println(err)
 	}
-	return c.JSON(http.StatusOK, edit)
+	res,err := stmt.Exec(name,position,salary)
+	if err != nil{
+		fmt.Println(err)
+	}
+	lastId,err := res.LastInsertId()
+	if err != nil{
+		fmt.Println(err)
+	}
+	return c.JSON(http.StatusOK, lastId)
 }
 
 func DeleteUser(c echo.Context) error {

@@ -26,7 +26,7 @@ func main() {
 	e.GET("/users/:user_id", controllers.GetUser)
 	e.DELETE("/users/:user_id", controllers.DeleteUser)
 	e.PUT("/users", controllers.EditUser)
-	e.POST("/users", controllers.AddUser)
+	e.POST("/users/:user_name/:user_position/:user_salary", controllers.AddUser)
 
 	e.Logger.Fatal(e.Start(":25060"))
 }
