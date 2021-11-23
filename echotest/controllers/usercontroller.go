@@ -34,16 +34,16 @@ func AddUser(c echo.Context) error {
 	position := c.Param("user_position")
 	salary := c.Param("user_salary")
 
-	stmt,err := conn.Prepare("INSERT INTO user (user_name,user_position,user_salary)VALUES(?,?,?)")
-	if err != nil{
+	stmt, err := conn.Prepare("INSERT INTO user (user_name,user_position,user_salary) VALUES (?,?,?)")
+	if err != nil {
 		fmt.Println(err)
 	}
-	res,err := stmt.Exec(name,position,salary)
-	if err != nil{
+	res, err := stmt.Exec(name, position, salary)
+	if err != nil {
 		fmt.Println(err)
 	}
-	lastId,err := res.LastInsertId()
-	if err != nil{
+	lastId, err := res.LastInsertId()
+	if err != nil {
 		fmt.Println(err)
 	}
 	return c.JSON(http.StatusOK, lastId)
