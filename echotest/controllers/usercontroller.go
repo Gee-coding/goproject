@@ -6,12 +6,11 @@ import (
 	"goproject/echotest/models"
 	"net/http"
 	"strconv"
+
 	"github.com/labstack/echo"
 )
 
 var conn = db.ConnectDB()
-
-
 
 func AddUser(c echo.Context) error {
 	name := c.Param("user_name")
@@ -43,7 +42,6 @@ func DeleteUser(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, id)
 }
-
 
 func GetUser(c echo.Context) error {
 	var (
@@ -85,8 +83,8 @@ func GetAllUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, userModelList)
 }
 
-func EditUser (c echo.Context) error {
-	
+func EditUser(c echo.Context) error {
+
 	var (
 		users = map[int]*models.User{}
 	)
@@ -95,6 +93,6 @@ func EditUser (c echo.Context) error {
 		return err
 	}
 	id, _ := strconv.Atoi(c.Param("user_id"))
-	users[id].Name = c.Param("user_name")
+	users[id].Name = u.Name
 	return c.JSON(http.StatusOK, users[id])
 }
