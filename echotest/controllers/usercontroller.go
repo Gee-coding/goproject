@@ -95,6 +95,6 @@ func EditUser (c echo.Context) error {
 		return err
 	}
 	id, _ := strconv.Atoi(c.Param("user_id"))
-	users[id].Name = u.Name
+	users[id].Name = c.Param("user_name")
 	return c.JSON(http.StatusOK, users[id])
 }
