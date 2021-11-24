@@ -5,7 +5,6 @@ import (
 	"goproject/echotest/db"
 	"goproject/echotest/models"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo"
 )
@@ -84,15 +83,22 @@ func GetAllUser(c echo.Context) error {
 }
 
 func EditUser(c echo.Context) error {
+	name := c.Param("user_name")
+	position := c.Param("user_position")
+	salary := c.Param("user_salary")
+	id := c.Param("user_id")
 
-	var (
-		users = map[int]*models.User{}
-	)
-	u := new(models.User)
-	if err := c.Bind(u); err != nil {
-		return err
+	stmt, err := conn.Prepare("UPDATE user SET user_name = ?,user_position = ?,user_salary = ? WHERE user_id = ? ")
+	if err != nil {
+		fmt.Println(err)
 	}
-	id, _ := strconv.Atoi(c.Param("user_id"))
-	users[id].Name = u.Name
-	return c.JSON(http.StatusOK, users[id])
+	resp, err := stmt.Exec(name, position, salary, id)
+	if err != nil {
+		fmt.Println(err)
+	}
+	count, err := resp.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return c.JSON(http.StatusOK, count)
 }
