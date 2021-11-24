@@ -5,29 +5,13 @@ import (
 	"goproject/echotest/db"
 	"goproject/echotest/models"
 	"net/http"
-
+	"strconv"
 	"github.com/labstack/echo"
 )
 
 var conn = db.ConnectDB()
 
-// func AddUser(c echo.Context) error {
-// 	name := c.Param("user_name")
-// 	position := c.Param("user_position")
-// 	salary := c.Param("user_salary")
-// 	query := "INSERT INTO user (user_name,user_position,user_salary) VALUES (?,?,?) RETURNING user_id"
-// 	stmt, err := conn.Prepare(query)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	defer stmt.Close()
-// 	var lastid int
-// 	err = stmt.QueryRow(name, position, salary).Scan(&lastid)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	return c.JSON(http.StatusOK, lastid)
-// }
+
 
 func AddUser(c echo.Context) error {
 	name := c.Param("user_name")
@@ -59,11 +43,7 @@ func DeleteUser(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, id)
 }
-func EditUser(c echo.Context) error {
-	id := c.QueryParam("id")
-	return c.String(http.StatusOK, id)
 
-}
 
 func GetUser(c echo.Context) error {
 	var (
@@ -103,4 +83,18 @@ func GetAllUser(c echo.Context) error {
 		return err
 	}
 	return c.JSON(http.StatusOK, userModelList)
+}
+
+func EditUser (c echo.Context) error {
+	
+	var (
+		users = map[int]*models.User{}
+	)
+	u := new(models.User)
+	if err := c.Bind(u); err != nil {
+		return err
+	}
+	id, _ := strconv.Atoi(c.Param("user_id"))
+	users[id].Name = u.Name
+	return c.JSON(http.StatusOK, users[id])
 }
